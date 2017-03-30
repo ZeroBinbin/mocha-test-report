@@ -1,2 +1,39 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <link rel="stylesheet" href="./tests/test.css">
+</head>
+<body>
+<div id="mocha"></div>
 
-<div style="width:100px;height:100px;background-color:red"></div>
+<script src="./tests/mocha.js"></script>
+<script>
+  window.initMochaPhantomJS && window.initMochaPhantomJS();
+  mocha.ui('bdd')
+</script>
+<script src="./tests/test.js"></script>
+<script>
+  (function() {
+    if (typeof Function.prototype.bind != 'function') {
+      Function.prototype.bind = function bind(obj) {
+        var args = Array.prototype.slice.call(arguments, 1),
+            self = this,
+            nop = function() {},
+            bound = function() {
+              return self.apply(
+                  this instanceof nop ? this : (obj || {}), args.concat(
+                      Array.prototype.slice.call(arguments)
+                  )
+              );
+            };
+        nop.prototype = this.prototype || {};
+        bound.prototype = new nop();
+        return bound;
+      };
+    }
+  })();
+  mocha.run()
+</script>
+</body>
+</html>
